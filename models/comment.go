@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Comment struct {
 	ID        int       `gorm:"primaryKey;column:comment_id" json:"id"`

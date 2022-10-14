@@ -13,7 +13,7 @@ func Connection() *gorm.DB {
 	var port = 5432
 	var username = "postgres"
 	var password = "legenda485132"
-	var dbName = "db-go-sql"
+	var dbName = "final-project"
 
 	var conn = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, username, password, dbName)
 
