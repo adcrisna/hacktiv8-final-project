@@ -8,11 +8,13 @@ import (
 )
 
 type SocialMedia struct {
-	ID             int    `gorm:"primaryKey;column:social_media_id" json:"id"`
-	Name           string `gorm:"not null;type:varchar(255)" json:"name" valid:"required~ Your name is required"`
-	SocialMediaUrl string `gorm:"not null;type:varchar(255)" json:"social_media_url" valid:"required~ Your social media url is required"`
-	UserID         int    `gorm:"not null;type:int" json:"user_id"`
-	Users          User   `gorm:"foreignKey:UserID;constraint:onUpdate:CASCADE,onDelete:CASCADE" json:"-"`
+	ID             int       `gorm:"primaryKey;column:social_media_id" json:"id"`
+	Name           string    `gorm:"not null;type:varchar(255)" json:"name" valid:"required~ Your name is required"`
+	SocialMediaUrl string    `gorm:"not null;type:varchar(255)" json:"social_media_url" valid:"required~ Your social media url is required"`
+	UserID         int       `gorm:"not null;type:int" json:"user_id"`
+	User           User      `gorm:"foreignKey:UserID;constraint:onUpdate:CASCADE,onDelete:CASCADE" json:"-"`
+	CreatedAt      time.Time `json:"created_at,omitempty"`
+	UpdatedAt      time.Time `json:"updated_at,omitempty"`
 }
 
 func (s *SocialMedia) BeforeCreate(tx *gorm.DB) (err error) {
