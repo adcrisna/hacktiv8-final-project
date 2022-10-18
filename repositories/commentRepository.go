@@ -36,19 +36,19 @@ func (c *commentRepository) GetAllComments() (*[]models.Comment, error) {
 
 func (c *commentRepository) GetCommentByID(commentId int) (*models.Comment, error) {
 	var comment models.Comment
-	err := c.db.Preload("User").Preload("Photo").Where("user_id=?", commentId).First(&comment).Error
+	err := c.db.Preload("User").Preload("Photo").Where("comment_id=?", commentId).First(&comment).Error
 	return &comment, err
 }
 
 func (c *commentRepository) UpdateComment(commentId int, updateComment *models.Comment) (*models.Comment, error) {
 	var comment models.Comment
 
-	err := c.db.Model(&comment).Clauses(clause.Returning{}).Where("user_id=?", commentId).Updates(&updateComment).Error
+	err := c.db.Model(&comment).Clauses(clause.Returning{}).Where("comment_id=?", commentId).Updates(&updateComment).Error
 	return &comment, err
 }
 
 func (c *commentRepository) DeleteComment(commentId int) error {
 	var comment models.Comment
-	err := c.db.Where("user_id=?", commentId).Delete(&comment).Error
+	err := c.db.Where("comment_id=?", commentId).Delete(&comment).Error
 	return err
 }

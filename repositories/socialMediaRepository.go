@@ -29,27 +29,27 @@ func (s *socialMediaRepository) CreateSocialMedia(socialmedia *models.SocialMedi
 
 func (s *socialMediaRepository) GetAllSocialMedias() (*[]models.SocialMedia, error) {
 	var socialMedias []models.SocialMedia
-	err := s.db.Preload("users").Find(&socialMedias).Error
+	err := s.db.Preload("User").Find(&socialMedias).Error
 	return &socialMedias, err
 }
 
 func (s *socialMediaRepository) GetSocialMediaByID(socialMediaId int) (*models.SocialMedia, error) {
 	var socialMedia models.SocialMedia
 
-	err := s.db.Preload("User").Where("user_id=?", socialMediaId).Find(&socialMedia).Error
+	err := s.db.Preload("User").Where("social_media_id=?", socialMediaId).Find(&socialMedia).Error
 	return &socialMedia, err
 }
 
 func (s *socialMediaRepository) UpdateSocialMedia(socialMediaId int, socialMediaUpdate *models.SocialMedia) (*models.SocialMedia, error) {
 	var socialMedia models.SocialMedia
 
-	err := s.db.Model(&socialMedia).Clauses(clause.Returning{}).Where("user_id=?", socialMediaId).Updates(socialMediaUpdate).Error
+	err := s.db.Model(&socialMedia).Clauses(clause.Returning{}).Where("social_media_id=?", socialMediaId).Updates(socialMediaUpdate).Error
 	return &socialMedia, err
 }
 
 func (s *socialMediaRepository) DeleteSocialMedia(socialMediaId int) error {
 	var socialMedia models.SocialMedia
 
-	err := s.db.Where("user_id=?", socialMediaId).Delete(&socialMedia).Error
+	err := s.db.Where("social_media_id=?", socialMediaId).Delete(&socialMedia).Error
 	return err
 }

@@ -31,7 +31,7 @@ func (s *SocialMediaController) CreateSocialMedia(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("user_id"))
+	userId, _ := strconv.Atoi(c.GetString("id"))
 
 	req.UserID = userId
 
@@ -58,7 +58,7 @@ func (s *SocialMediaController) UpdateSocialMedia(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("user_id"))
+	userId, _ := strconv.Atoi(c.GetString("id"))
 	id, _ := strconv.Atoi(c.Param("socialMediaId"))
 	req.UserID = userId
 	req.ID = id
@@ -81,7 +81,7 @@ func (s *SocialMediaController) DeleteSocialMedia(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("user_id"))
+	userId, _ := strconv.Atoi(c.GetString("id"))
 	id, _ := strconv.Atoi(c.Param("socialMediaId"))
 	req.UserID = userId
 	req.ID = id

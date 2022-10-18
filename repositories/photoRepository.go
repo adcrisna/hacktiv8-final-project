@@ -35,20 +35,20 @@ func (p *photoRepository) GetAllPhotos() (*[]models.Photo, error) {
 
 func (p *photoRepository) GetPhotoByID(photoId int) (*models.Photo, error) {
 	var photo models.Photo
-	err := p.db.Preload("User").Where("user_id=?", photoId).Find(&photo).Error
+	err := p.db.Preload("User").Where("photo_id=?", photoId).Find(&photo).Error
 	return &photo, err
 }
 
 func (p *photoRepository) UpdatePhoto(photoId int, updatePhoto *models.Photo) (*models.Photo, error) {
 	var photo models.Photo
 
-	err := p.db.Model(&photo).Clauses(clause.Returning{}).Where("user_id=?", photoId).Updates(updatePhoto).Error
+	err := p.db.Model(&photo).Clauses(clause.Returning{}).Where("photo_id=?", photoId).Updates(updatePhoto).Error
 	return &photo, err
 }
 
 func (p *photoRepository) DeletePhoto(photoId int) error {
 	var photo models.Photo
 
-	err := p.db.Where("user_id=?", photoId).Delete(&photo).Error
+	err := p.db.Where("photo_id=?", photoId).Delete(&photo).Error
 	return err
 }
