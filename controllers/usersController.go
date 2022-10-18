@@ -1,54 +1,104 @@
 package controllers
 
 import (
-	"final-project/database"
 	"final-project/models"
+	"final-project/services"
 	"net/http"
-	"net/mail"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
-func valid(email string) bool {
-	_, err := mail.ParseAddress(email)
-	return err == nil
+type UserController struct {
+	userService services.UserService
 }
 
-func RegisterUser(ctx *gin.Context) {
-	db := database.Connection()
-	user := models.User{}
+func NewUserController(service *services.UserService) *UserController {
+	return &UserController{
+		userService: *service,
+	}
+}
 
-	if err := ctx.ShouldBind(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
+func (u *UserController) RegisterUser(c *gin.Context) {
+	var req models.CreateUser
 
-	if !valid(user.Email) {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "bukan email"})
-		return
-	}
-	if user.Age <= 8 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "minimal umur untuk mendaftar 8 tahun"})
-		return
-	}
-	if len(user.Password) <= 6 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "minimal panjang 6 karakter"})
-		return
-	}
+	err := c.ShouldBind(&req)
 
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+
 		return
 	}
 
-	newUser := models.User{Username: user.Username, Email: user.Email, Password: string(hashPassword), Age: user.Age}
-	userRes := models.UserResponse{}
-	if err := db.Create(&newUser).Scan(&userRes).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+	result := u.userService.UserRegister(req)
+
+	c.JSON(result.Status, result.Payload)
+}
+
+func (u *UserController) LoginUser(c *gin.Context) {
+	var req models.CreateUser
+
+	err := c.ShouldBind(&req)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+
 		return
 	}
-	ctx.JSON(http.StatusCreated, gin.H{"message": "create data user success", "data": userRes})
 
+	result := u.userService.LoginUser(req)
+
+	c.JSON(result.Status, result.Payload)
+}
+
+func (u *UserController) UpdateUser(c *gin.Context) {
+	var req models.CreateUser
+
+	err := c.ShouldBind(&req)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+
+		return
+	}
+
+	id, _ := strconv.Atoi(c.GetString("id"))
+	userId, _ := strconv.Atoi(c.Param("userId"))
+
+	req.ID = userId
+	result := u.userService.UpdateUser(id, req)
+
+	c.JSON(result.Status, result.Payload)
+
+}
+
+func (u *UserController) DeleteUser(c *gin.Context) {
+	var req models.CreateUser
+
+	err := c.ShouldBind(&req)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+
+		return
+	}
+
+	id, _ := strconv.Atoi(c.GetString("id"))
+	userId, _ := strconv.Atoi(c.Param("userId"))
+
+	req.ID = userId
+	result := u.userService.DeleteUser(id, req)
+	c.JSON(result.Status, result.Payload)
 }
