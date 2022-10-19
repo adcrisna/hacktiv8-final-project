@@ -31,7 +31,7 @@ func (u *UserService) UserRegister(request models.CreateUser) *models.Response {
 
 	if err != nil {
 		return &models.Response{
-			Status: http.StatusBadRequest,
+			Status: http.StatusInternalServerError,
 			Payload: map[string]string{
 				"error": err.Error(),
 			},
