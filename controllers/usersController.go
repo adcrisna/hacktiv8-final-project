@@ -71,8 +71,21 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	id, _ := strconv.Atoi(c.GetString("id"))
-	userId, _ := strconv.Atoi(c.Param("userId"))
+	id, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
+
+	userId, err := strconv.Atoi(c.Param("userId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 
 	req.ID = userId
 	result := u.userService.UpdateUser(id, req)
@@ -95,8 +108,21 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	id, _ := strconv.Atoi(c.GetString("id"))
-	userId, _ := strconv.Atoi(c.Param("userId"))
+	id, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
+
+	userId, err := strconv.Atoi(c.Param("userId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 
 	req.ID = userId
 	result := u.userService.DeleteUser(id, req)

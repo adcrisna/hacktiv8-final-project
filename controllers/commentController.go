@@ -31,7 +31,13 @@ func (cc *CommentController) CreateComment(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 
 	req.UserID = userId
 
@@ -58,8 +64,21 @@ func (cc *CommentController) UpdateComment(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
-	commentId, _ := strconv.Atoi(c.Param("commentId"))
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
+
+	commentId, err := strconv.Atoi(c.Param("commentId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 
 	req.UserID = userId
 	req.ID = commentId
@@ -80,8 +99,20 @@ func (cc *CommentController) DeleteComment(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
-	commentId, _ := strconv.Atoi(c.Param("commentId"))
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
+	commentId, err := strconv.Atoi(c.Param("commentId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 
 	req.UserID = userId
 	req.ID = commentId

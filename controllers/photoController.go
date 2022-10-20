@@ -33,7 +33,13 @@ func (p *PhotoController) CreatePhoto(c *gin.Context) {
 		return
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 
 	if userId < 1 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
@@ -60,8 +66,6 @@ func (p *PhotoController) GetAllPhotos(c *gin.Context) {
 
 func (p *PhotoController) UpdatePhoto(c *gin.Context) {
 	var req models.CreatePhoto
-	userId, _ := strconv.Atoi(c.GetString("id"))
-	photoId, _ := strconv.Atoi(c.Param("photoId"))
 
 	err := c.ShouldBind(&req)
 
@@ -70,7 +74,24 @@ func (p *PhotoController) UpdatePhoto(c *gin.Context) {
 			Status:  http.StatusBadRequest,
 			Payload: err.Error(),
 		})
+		return
+	}
 
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+		return
+	}
+
+	photoId, err := strconv.Atoi(c.Param("photoId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
 		return
 	}
 
@@ -85,17 +106,31 @@ func (p *PhotoController) UpdatePhoto(c *gin.Context) {
 
 func (p *PhotoController) DeletePhoto(c *gin.Context) {
 	var req models.CreatePhoto
-	userId, _ := strconv.Atoi(c.GetString("id"))
-	photoId, _ := strconv.Atoi(c.Param("photoId"))
 
 	err := c.ShouldBind(&req)
-
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
 			Status:  http.StatusBadRequest,
 			Payload: err.Error(),
 		})
+		return
+	}
 
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+		return
+	}
+
+	photoId, err := strconv.Atoi(c.Param("photoId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
 		return
 	}
 

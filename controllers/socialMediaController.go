@@ -31,8 +31,13 @@ func (s *SocialMediaController) CreateSocialMedia(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
-
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 	req.UserID = userId
 
 	result := s.socialMediaService.CreateSocialMedia(req)
@@ -58,8 +63,20 @@ func (s *SocialMediaController) UpdateSocialMedia(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
-	id, _ := strconv.Atoi(c.Param("socialMediaId"))
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
+	id, err := strconv.Atoi(c.Param("socialMediaId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 	req.UserID = userId
 	req.ID = id
 
@@ -81,8 +98,20 @@ func (s *SocialMediaController) DeleteSocialMedia(c *gin.Context) {
 		})
 	}
 
-	userId, _ := strconv.Atoi(c.GetString("id"))
-	id, _ := strconv.Atoi(c.Param("socialMediaId"))
+	userId, err := strconv.Atoi(c.GetString("id"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
+	id, err := strconv.Atoi(c.Param("socialMediaId"))
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, models.Response{
+			Status:  http.StatusBadRequest,
+			Payload: err.Error(),
+		})
+	}
 	req.UserID = userId
 	req.ID = id
 
