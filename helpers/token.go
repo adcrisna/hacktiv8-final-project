@@ -28,8 +28,9 @@ func VerifyToken(tokenString string) (interface{}, error) {
 		}
 		return []byte(SECRET_KEY), nil
 	})
-	if _, ok := token.Claims.(jwt.MapClaims); !ok && !token.Valid {
+	r, ok := token.Claims.(jwt.MapClaims)
+	if !ok && !token.Valid {
 		return nil, errResponse
 	}
-	return token.Claims.(jwt.MapClaims), nil
+	return r, nil
 }
