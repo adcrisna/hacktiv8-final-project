@@ -3,19 +3,26 @@ package database
 import (
 	"final-project/models"
 	"fmt"
+	"os"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func Connection() *gorm.DB {
-	var host = "localhost"
-	var port = 5432
-	var username = "postgres"
-	var password = "legenda485132"
-	var dbName = "final-project"
-
-	var conn = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, username, password, dbName)
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println("Some error occured. Err:", err)
+	}
+	var (
+		host     = os.Getenv("DB_HOST")
+		port     = os.Getenv("DB_PORT")
+		username = os.Getenv("DB_USERNAME")
+		password = os.Getenv("DB_PASSWORD")
+		dbName   = os.Getenv("DB_NAME")
+	)
+	var conn = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, username, password, dbName)
 
 	db, err := gorm.Open(postgres.Open(conn))
 	if err != nil {
